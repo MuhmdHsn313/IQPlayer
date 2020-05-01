@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:iqplayer/src/blocs/screen/screen_bloc.dart';
+import 'package:iqplayer/src/ui/screen_controllers.dart';
 import 'package:video_player/video_player.dart';
 
 class IQScreen extends StatefulWidget {
@@ -73,143 +76,18 @@ class _IQScreenState extends State<IQScreen>
             child: AnimatedOpacity(
               opacity: 1,
               duration: Duration(milliseconds: 400),
-              child: Container(
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      Colors.black87,
-                      Colors.transparent,
-                      Colors.black87,
-                    ],
-                  ),
+              child: BlocProvider<ScreenBloc>(
+                create: (context) => ScreenBloc(
+                  title: title,
+                  description: description,
                 ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    _buildAppBar(),
-                    Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: <Widget>[
-                        IconButton(
-                          icon: Icon(
-                            Icons.replay_5,
-                            color: Colors.white,
-                          ),
-                          onPressed: () {},
-                        ),
-                        _mainButton(),
-                        IconButton(
-                          icon: Icon(
-                            Icons.forward_10,
-                            color: Colors.white,
-                          ),
-                          onPressed: () {},
-                        ),
-                      ],
-                    ),
-                    _buildBottomScreen(),
-                  ],
+                child: ScreenControllers(
+                  playAnimationController: playAnimationController,
                 ),
               ),
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildAppBar() {
-    return AppBar(
-      title: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Text(
-            title,
-          ),
-          Text(
-            description,
-            overflow: TextOverflow.fade,
-            style: TextStyle(fontSize: 12, fontWeight: FontWeight.w300),
-          ),
-        ],
-      ),
-      centerTitle: true,
-      backgroundColor: Colors.transparent,
-      elevation: 0,
-      actions: <Widget>[
-        IconButton(
-          icon: Icon(Icons.screen_rotation),
-          tooltip: 'Lock Rotation',
-          onPressed: () {},
-        ),
-        IconButton(
-          icon: Icon(Icons.lock_open),
-          tooltip: 'Lock Controls',
-          onPressed: () {},
-        ),
-      ],
-    );
-  }
-
-  Widget _buildBottomScreen() {
-    return Container(
-      margin: EdgeInsets.symmetric(vertical: 5),
-      padding: EdgeInsets.all(8.0),
-      child: Row(
-        mainAxisSize: MainAxisSize.max,
-        children: <Widget>[
-          Text(
-            '01:38',
-            style: TextStyle(color: Colors.white),
-          ),
-          Expanded(
-            child: Slider(
-              value: 40,
-              min: 0,
-              max: 100,
-              activeColor: Colors.green,
-              inactiveColor: Colors.green[200],
-              onChanged: (value) {},
-            ),
-          ),
-          Text(
-            '19:08:18',
-            style: TextStyle(color: Colors.white),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _mainButton() {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.green,
-        borderRadius: BorderRadius.circular(50),
-        boxShadow: [
-          BoxShadow(color: Colors.black45),
-        ],
-      ),
-      child: IconButton(
-        color: Colors.white,
-        icon: AnimatedIcon(
-          icon: AnimatedIcons.pause_play,
-          progress: Tween<double>(begin: 0.0, end: 1.0).animate(
-            playAnimationController,
-          ),
-        ),
-        onPressed: () {
-          if (playAnimationController.status.index == 0)
-            playAnimationController.forward();
-          else
-            playAnimationController.reverse();
-        },
       ),
     );
   }

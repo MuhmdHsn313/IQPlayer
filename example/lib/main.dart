@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:iqplayer/iqplayer.dart';
 
 void main() {
   runApp(MyApp());
@@ -103,6 +104,25 @@ class _MyHomePageState extends State<MyHomePage> {
             Text(
               '$_counter',
               style: Theme.of(context).textTheme.headline4,
+            ),
+            RaisedButton(
+              child: Text('Go'),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => IQScreen(
+                      title: 'Demo Video',
+                      description: 'Simple video as a demo video',
+                      videoPlayerController: VideoPlayerController.network(
+                        'https://d11b76aq44vj33.cloudfront.net/media/720/video/5def7824adbbc.mp4',
+                      ),
+                      subtitleUrl:
+                          'https://duoidi6ujfbv.cloudfront.net/media/0/subtitles/5675420c9d9a3.vtt',
+                    ),
+                  ),
+                );
+              },
             ),
           ],
         ),

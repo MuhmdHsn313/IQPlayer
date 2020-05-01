@@ -1,6 +1,4 @@
 library iqplayer;
 
-class IQPlayer {
-  /// Returns [value] plus 1.
-  int addOne(int value) => value + 1;
-}
+export 'src/ui/iqscreen.dart';
+export 'package:video_player/video_player.dart';

@@ -1,8 +1,8 @@
 name: iqplayer
 description: Simple video player with subtitle.
 version: 0.0.1
-author:
-homepage:
+author: Muhammad Hasan Alasady <muhmdhsn313@gmail.com>
+homepage: https://github.com/MuhmdHsn313/IQPlayer
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -19,7 +19,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
+  bloc_test: ^5.0.0
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 

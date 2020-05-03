@@ -19,6 +19,21 @@ class PlayingState extends PlayerState {
     @required this.position,
   })  : assert(duration != null),
         assert(duration != null);
+
+  @override
+  List<Object> get props => [position, duration];
+}
+
+class FinishState extends PlayingState {
+  const FinishState({
+    @required Duration duration,
+    @required Duration position,
+  })  : assert(duration != null),
+        assert(duration != null),
+        super(
+          position: position,
+          duration: duration,
+        );
 }
 
 class ErrorState extends PlayerState {

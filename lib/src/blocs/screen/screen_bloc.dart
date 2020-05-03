@@ -14,7 +14,10 @@ class ScreenBloc extends Bloc<ScreenEvent, ScreenState> {
   });
 
   @override
-  ScreenState get initialState => ScreenState.showControls();
+  ScreenState get initialState {
+    _hideStateBar();
+    return ScreenState.showControls();
+  }
 
   @override
   Stream<ScreenState> mapEventToState(
@@ -62,5 +65,23 @@ class ScreenBloc extends Bloc<ScreenEvent, ScreenState> {
         DeviceOrientation.landscapeLeft,
         DeviceOrientation.landscapeRight,
       ]);
+  }
+
+  void _hideStateBar() async {
+    SystemChrome.setEnabledSystemUIOverlays([]);
+  }
+
+  void _showStateBar() async {
+    SystemChrome.setEnabledSystemUIOverlays([
+      SystemUiOverlay.top,
+      SystemUiOverlay.bottom,
+    ]);
+  }
+
+  @override
+  Future<void> close() {
+    _showStateBar();
+    _enableRotation();
+    return super.close();
   }
 }

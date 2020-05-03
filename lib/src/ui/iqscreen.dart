@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:iqplayer/src/blocs/player/bloc.dart';
 import 'package:iqplayer/src/blocs/screen/screen_bloc.dart';
 import 'package:iqplayer/src/ui/screen_controllers.dart';
 import 'package:video_player/video_player.dart';
@@ -12,11 +13,13 @@ class IQScreen extends StatefulWidget {
 
   const IQScreen({
     Key key,
-    this.title,
-    this.description,
-    this.videoPlayerController,
+    @required this.title,
+    this.description: '',
+    @required this.videoPlayerController,
     this.subtitleUrl,
-  }) : super(key: key);
+  })  : assert(title != null),
+        assert(videoPlayerController != null),
+        super(key: key);
 
   @override
   _IQScreenState createState() => _IQScreenState();
@@ -73,17 +76,21 @@ class _IQScreenState extends State<IQScreen>
             bottom: 0,
             left: 0,
             right: 0,
-            child: AnimatedOpacity(
-              opacity: 1,
-              duration: Duration(milliseconds: 400),
-              child: BlocProvider<ScreenBloc>(
-                create: (context) => ScreenBloc(
-                  title: title,
-                  description: description,
+            child: MultiBlocProvider(
+              providers: [
+                BlocProvider<ScreenBloc>(
+                  create: (context) => ScreenBloc(
+                    title: title,
+                    description: description,
+                  ),
                 ),
-                child: ScreenControllers(
-                  playAnimationController: playAnimationController,
+                BlocProvider<PlayerBloc>(
+                  create: (context) =>
+                      PlayerBloc(videoPlayerController)..add(FetchVideo()),
                 ),
+              ],
+              child: ScreenControllers(
+                playAnimationController: playAnimationController,
               ),
             ),
           ),

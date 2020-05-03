@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:iqplayer/src/blocs/player/bloc.dart';
 import 'package:iqplayer/src/blocs/screen/bloc.dart';
 
 class ScreenControllers extends StatelessWidget {
@@ -47,15 +48,17 @@ class ScreenControllers extends StatelessWidget {
                             Icons.replay_5,
                             color: Colors.white,
                           ),
-                          onPressed: () {},
+                          onPressed: () => BlocProvider.of<PlayerBloc>(context)
+                              .add(Backward()),
                         ),
-                        _mainButton(),
+                        _mainButton(context),
                         IconButton(
                           icon: Icon(
                             Icons.forward_10,
                             color: Colors.white,
                           ),
-                          onPressed: () {},
+                          onPressed: () => BlocProvider.of<PlayerBloc>(context)
+                              .add(Forward()),
                         ),
                       ],
                     ),
@@ -129,59 +132,148 @@ class ScreenControllers extends StatelessWidget {
   }
 
   Widget _buildBottomScreen(BuildContext context, ScreenState state) {
-    return Container(
-      margin: EdgeInsets.symmetric(vertical: 5),
-      padding: EdgeInsets.all(8.0),
-      child: Row(
-        mainAxisSize: MainAxisSize.max,
-        children: <Widget>[
-          Text(
-            '01:38',
-            style: TextStyle(color: Colors.white),
-          ),
-          Expanded(
-            child: Slider(
-              value: 40,
-              min: 0,
-              max: 100,
-              activeColor: Colors.green,
-              inactiveColor: Colors.green[200],
-              onChanged: (value) {},
+    return BlocBuilder<PlayerBloc, PlayerState>(
+      bloc: BlocProvider.of<PlayerBloc>(context),
+      builder: (context, state) {
+        if (state is PlayingState)
+          return Container(
+            margin: EdgeInsets.symmetric(vertical: 5),
+            padding: EdgeInsets.all(8.0),
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              children: <Widget>[
+                Text(
+                  _formatDuration(state.position),
+                  style: TextStyle(color: Colors.white),
+                ),
+                Expanded(
+                  child: Slider(
+                    value: state.position.inSeconds.toDouble(),
+                    min: Duration.zero.inSeconds.toDouble(),
+                    max: state.duration.inSeconds.toDouble(),
+                    activeColor: Colors.green,
+                    inactiveColor: Colors.green[200],
+                    onChanged: (value) =>
+                        BlocProvider.of<PlayerBloc>(context).add(
+                      ChangeTimeTo(
+                        Duration(seconds: value.toInt()),
+                      ),
+                    ),
+                  ),
+                ),
+                Text(
+                  _formatDuration(state.duration),
+                  style: TextStyle(color: Colors.white),
+                ),
+              ],
             ),
+          );
+
+        return Container(
+          margin: EdgeInsets.symmetric(vertical: 5),
+          padding: EdgeInsets.all(8.0),
+          child: Row(
+            mainAxisSize: MainAxisSize.max,
+            children: <Widget>[
+              Text(
+                _formatDuration(Duration.zero),
+                style: TextStyle(color: Colors.white),
+              ),
+              Expanded(
+                child: Slider(
+                  value: Duration.zero.inSeconds.toDouble(),
+                  min: Duration.zero.inSeconds.toDouble(),
+                  max: Duration.zero.inSeconds.toDouble(),
+                  activeColor: Colors.green,
+                  inactiveColor: Colors.green[200],
+                  onChanged: (double value) {  },
+                ),
+              ),
+              Text(
+                _formatDuration(Duration.zero),
+                style: TextStyle(color: Colors.white),
+              ),
+            ],
           ),
-          Text(
-            '19:08:18',
-            style: TextStyle(color: Colors.white),
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 
-  Widget _mainButton() {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.green,
-        borderRadius: BorderRadius.circular(50),
-        boxShadow: [
-          BoxShadow(color: Colors.black45),
-        ],
-      ),
-      child: IconButton(
-        color: Colors.white,
-        icon: AnimatedIcon(
-          icon: AnimatedIcons.pause_play,
-          progress: Tween<double>(begin: 0.0, end: 1.0).animate(
-            playAnimationController,
-          ),
-        ),
-        onPressed: () {
-          if (playAnimationController.status.index == 0)
-            playAnimationController.forward();
-          else
-            playAnimationController.reverse();
-        },
-      ),
+  Widget _mainButton(BuildContext context) {
+    return BlocBuilder<PlayerBloc, PlayerState>(
+      bloc: BlocProvider.of<PlayerBloc>(context),
+      builder: (BuildContext context, PlayerState state) {
+        if (state is PlayingState)
+          return Container(
+            decoration: BoxDecoration(
+              color: Colors.green,
+              borderRadius: BorderRadius.circular(50),
+              boxShadow: [
+                BoxShadow(color: Colors.black45),
+              ],
+            ),
+            child: IconButton(
+              color: Colors.white,
+              icon: state is FinishState ? Icon(Icons.replay) : AnimatedIcon(
+                icon: AnimatedIcons.pause_play,
+                progress: Tween<double>(begin: 0.0, end: 1.0).animate(
+                  playAnimationController,
+                ),
+              ),
+              onPressed: () {
+                if(state is FinishState){
+                  BlocProvider.of<PlayerBloc>(context).add(FetchVideo());
+                }
+                else if (playAnimationController.status.index != 0) {
+                  BlocProvider.of<PlayerBloc>(context).add(PlayVideo());
+                  playAnimationController.reverse();
+                } else {
+                  BlocProvider.of<PlayerBloc>(context).add(PauseVideo());
+                  playAnimationController.forward();
+                }
+              },
+            ),
+          );
+
+        if (state is ErrorState)
+          return Row(
+            children: <Widget>[
+              Icon(
+                Icons.error,
+                color: Colors.white,
+              ),
+              Text('${state.error}'),
+            ],
+          );
+
+        return CircularProgressIndicator(
+          valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
+        );
+      },
     );
+  }
+
+  String _formatDuration(Duration position) {
+    final ms = position?.inMilliseconds ?? 0;
+
+    int seconds = ms ~/ 1000;
+    final int hours = seconds ~/ 3600;
+    seconds = seconds % 3600;
+    var minutes = seconds ~/ 60;
+    seconds = seconds % 60;
+
+    final hoursString = hours >= 10 ? '$hours' : hours == 0 ? '00' : '0$hours';
+
+    final minutesString =
+        minutes >= 10 ? '$minutes' : minutes == 0 ? '00' : '0$minutes';
+
+    final secondsString =
+        seconds >= 10 ? '$seconds' : seconds == 0 ? '00' : '0$seconds';
+
+    final formattedTime =
+        '${hoursString == '00' ? '' : hoursString + ':'}$minutesString:$secondsString';
+
+    return formattedTime;
   }
 }

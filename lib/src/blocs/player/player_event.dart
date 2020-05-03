@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:meta/meta.dart';
 
 abstract class PlayerEvent extends Equatable {
   const PlayerEvent();
@@ -12,6 +13,20 @@ class FetchVideo extends PlayerEvent {}
 class PlayVideo extends PlayerEvent {}
 
 class PauseVideo extends PlayerEvent {}
+
+class FinishVideo extends PlayerEvent {
+  final Duration duration;
+  final Duration position;
+
+  const FinishVideo({
+    @required this.duration,
+    @required this.position,
+  })  : assert(duration != null),
+        assert(duration != null);
+
+  @override
+  List<Object> get props => [position, duration];
+}
 
 class Forward extends PlayerEvent {}
 

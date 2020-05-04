@@ -22,6 +22,9 @@ class Subtitle extends Equatable {
 
   bool operator >=(Subtitle other) => this.start >= other.start;
 
+  int compareTo(Subtitle other) =>
+      this.start.inMilliseconds.compareTo(other.start.inMilliseconds);
+
   @override
   List<Object> get props => [start, end, data];
 }

@@ -12,12 +12,10 @@ class SubtitleRepository {
   }
 
   Future<String> fetchFromFile(File file) async {
-    final data = await file.readAsString();
-    return utf8.decode(data.codeUnits);
+    return await file.readAsString();
   }
 
   Future<String> fetchFromAssets(String path) async {
-    final String data = await rootBundle.loadString(path);
-    return utf8.decode(data.codeUnits);
+    return await rootBundle.loadString(path);
   }
 }

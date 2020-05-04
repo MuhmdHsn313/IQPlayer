@@ -1,7 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iqplayer/src/blocs/player/bloc.dart';
 import 'package:iqplayer/src/blocs/screen/bloc.dart';
+
+import 'iqparser.dart';
 
 class ScreenControllers extends StatelessWidget {
   final AnimationController playAnimationController;
@@ -62,25 +65,77 @@ class ScreenControllers extends StatelessWidget {
                         ),
                       ],
                     ),
-                    _buildBottomScreen(context, state),
+                    Column(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        IQParser(),
+                        _buildBottomScreen(context, state),
+                      ],
+                    ),
                   ],
                 ),
               )
             : Container(
-                alignment: Alignment.topCenter,
-                child: AppBar(
-                  backgroundColor: Colors.transparent,
-                  elevation: 0,
-                  leading: Container(),
-                  actions: <Widget>[
-                    IconButton(
-                      icon:
-                          Icon(state.lockScreen ? Icons.lock : Icons.lock_open),
-                      tooltip:
-                          state.lockScreen ? 'Unlock Screen' : 'Lock Screen',
-                      onPressed: () => BlocProvider.of<ScreenBloc>(context).add(
-                        state.lockScreen ? UnlockScreen() : LockScreen(),
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height,
+                child: Stack(
+                  children: <Widget>[
+                    AppBar(
+                      backgroundColor: Colors.transparent,
+                      elevation: 0,
+                      leading: Container(),
+                      actions: <Widget>[
+                        IconButton(
+                          icon: Icon(
+                              state.lockScreen ? Icons.lock : Icons.lock_open),
+                          tooltip: state.lockScreen
+                              ? 'Unlock Screen'
+                              : 'Lock Screen',
+                          onPressed: () =>
+                              BlocProvider.of<ScreenBloc>(context).add(
+                            state.lockScreen ? UnlockScreen() : LockScreen(),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Container(
+                      alignment: Alignment.center,
+                      child: BlocBuilder<PlayerBloc, PlayerState>(
+                        bloc: BlocProvider.of<PlayerBloc>(context),
+                        builder: (BuildContext context, PlayerState state) {
+                          if (state is LoadingState)
+                            return CircularProgressIndicator(
+                              valueColor:
+                                  AlwaysStoppedAnimation<Color>(Colors.green),
+                            );
+
+                          if (state is FinishState)
+                            return Container(
+                              decoration: BoxDecoration(
+                                color: Colors.green,
+                                borderRadius: BorderRadius.circular(50),
+                                boxShadow: [
+                                  BoxShadow(color: Colors.black45),
+                                ],
+                              ),
+                              child: IconButton(
+                                color: Colors.white,
+                                icon: Icon(Icons.replay),
+                                onPressed: () {
+                                  BlocProvider.of<PlayerBloc>(context)
+                                      .add(FetchVideo());
+                                },
+                              ),
+                            );
+
+                          return Container();
+                        },
                       ),
+                    ),
+                    Positioned(
+                      bottom: 25,
+                      child: IQParser(),
                     ),
                   ],
                 ),
@@ -186,7 +241,7 @@ class ScreenControllers extends StatelessWidget {
                   max: Duration.zero.inSeconds.toDouble(),
                   activeColor: Colors.green,
                   inactiveColor: Colors.green[200],
-                  onChanged: (double value) {  },
+                  onChanged: (double value) {},
                 ),
               ),
               Text(
@@ -215,17 +270,18 @@ class ScreenControllers extends StatelessWidget {
             ),
             child: IconButton(
               color: Colors.white,
-              icon: state is FinishState ? Icon(Icons.replay) : AnimatedIcon(
-                icon: AnimatedIcons.pause_play,
-                progress: Tween<double>(begin: 0.0, end: 1.0).animate(
-                  playAnimationController,
-                ),
-              ),
+              icon: state is FinishState
+                  ? Icon(Icons.replay)
+                  : AnimatedIcon(
+                      icon: AnimatedIcons.pause_play,
+                      progress: Tween<double>(begin: 0.0, end: 1.0).animate(
+                        playAnimationController,
+                      ),
+                    ),
               onPressed: () {
-                if(state is FinishState){
+                if (state is FinishState) {
                   BlocProvider.of<PlayerBloc>(context).add(FetchVideo());
-                }
-                else if (playAnimationController.status.index != 0) {
+                } else if (playAnimationController.status.index != 0) {
                   BlocProvider.of<PlayerBloc>(context).add(PlayVideo());
                   playAnimationController.reverse();
                 } else {

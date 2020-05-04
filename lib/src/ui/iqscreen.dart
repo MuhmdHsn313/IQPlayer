@@ -2,21 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iqplayer/src/blocs/player/bloc.dart';
 import 'package:iqplayer/src/blocs/screen/screen_bloc.dart';
+import 'package:iqplayer/src/blocs/subtitle/bloc.dart';
 import 'package:iqplayer/src/ui/screen_controllers.dart';
+import 'package:iqplayer/src/utils/subtitle_provider.dart';
 import 'package:video_player/video_player.dart';
 
 class IQScreen extends StatefulWidget {
   final String title;
   final String description;
   final VideoPlayerController videoPlayerController;
-  final String subtitleUrl;
+  final SubtitleProvider subtitleProvider;
 
   const IQScreen({
     Key key,
     @required this.title,
-    this.description: '',
     @required this.videoPlayerController,
-    this.subtitleUrl,
+    this.description: '',
+    this.subtitleProvider,
   })  : assert(title != null),
         assert(videoPlayerController != null),
         super(key: key);
@@ -36,7 +38,7 @@ class _IQScreenState extends State<IQScreen>
   VideoPlayerController get videoPlayerController =>
       widget.videoPlayerController;
 
-  String get subtitleUrl => widget.subtitleUrl;
+  SubtitleProvider get subtitleProvider => widget.subtitleProvider;
 
   @override
   void initState() {
@@ -87,6 +89,10 @@ class _IQScreenState extends State<IQScreen>
                 BlocProvider<PlayerBloc>(
                   create: (context) =>
                       PlayerBloc(videoPlayerController)..add(FetchVideo()),
+                ),
+                BlocProvider<SubtitleBloc>(
+                  create: (context) =>
+                      SubtitleBloc(subtitleProvider)..add(FetchSubtitles()),
                 ),
               ],
               child: ScreenControllers(

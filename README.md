@@ -12,15 +12,15 @@ Simple video player with subtitle wrote for flutter.
 
 ## Features
 1. [x] Play video from Assets, Files, Network by `VideoPlayerController` from video_player.
-2. [ ] Parse subtitles from Assets, Files, Network `SubtitleProvider` class.
+2. [x] Parse subtitles from Assets, Files, Network `SubtitleProvider` class.
 3. [ ] Custom theme you can use with `IQTheme` class.
-4. [ ] Support Subtitles:
-   1. [ ] VTT format
+4. [x] Support Subtitles:
+   1. [x] VTT format
    2. [ ] SRT format
    3. [ ] User define format
 5. [x] **IQScreen:** a video player scaffold screen.
 6. [ ] **IQPlayer:** a widget enable you to watch video implement with your screen.
-7. [ ] **IQParser:** a subtitle package that view subtitles, included the widget and parser
+7. [x] **IQParser:** a subtitle package that view subtitles, included the widget and parser
 
 # Installation
 ##  1. Depend on
@@ -28,7 +28,7 @@ Go to `pubspec.yaml` and set the dependencies like:
 
 ```yaml
 dependencies:
-  iqplayer: ^0.0.1
+  iqplayer: <latest_version>
 ```
 
 Install packages from the command line with Flutter:
@@ -50,7 +50,7 @@ The Flutter project template adds it, so it may already be there.
 Warning: The video player is not functional on iOS simulators. An iOS device must be used during development/testing.
 
 Add the following entry to your Info.plist file, located in <project root>/ios/Runner/Info.plist:
-```plist
+```
 <key>NSAppTransportSecurity</key>
 <dict>
   <key>NSAllowsArbitraryLoads</key>
@@ -72,6 +72,7 @@ import "package:iqplayer/iqplayer.dart";
 ```dart
 IQScreen(
   videoPlayerController = VideoPlayerController.network(""),
+  subtitleProvider: SubtitleProvider.fromNetwork(""),
   title: "Simple Video",
   description: "Simple Description",
 );
@@ -81,8 +82,18 @@ IQScreen(
   > In development.
 
 3. **IQParser:**
-  > In development.
 
+> Note: It is used automatically with `IQScreen` and you can use and display data with `SubtitleProvider`.
+
+```dart
+BlocProvider<SubtitleBloc>(
+  create: (context) =>
+    SubtitleBloc(
+      SubtitleProvider.fromNetwork(""),
+    )..add(FetchSubtitles()),
+    child: MyParser(),
+);
+```
 # Using
 
 1. Start use `IQScreen` with Navigator:
@@ -95,10 +106,37 @@ Navigator.push(
     title: "",
     description: "",
     videoPlayerController: VideoPlayerController.network(""),
+    subtitleProvider: SubtitleProvider.fromNetwork(""),
    ),
   ),
 );
 ```
+
+2. Using of `IQParser`:
+
+> You have to use `BlocProvider` with `SubtitleProvider` to configure subtitles.
+
+```dart
+// In Your widget
+BlocProvider<SubtitleBloc>(
+  create: (context) =>
+    SubtitleBloc(
+      SubtitleProvider.fromNetwork(""),
+    )..add(FetchSubtitles()),
+    child: MyParser(),
+);
+
+// new parser class, you can exclude `MyParser`
+class MyParser extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return IQParser();
+  }
+}
+```
+> Note: You can exclude "MyParser" and delete it!
+
+> Note: What is the reason for creating `MyParser`? [see this](https://bloclibrary.dev/#/faqs?id=blocproviderof-fails-to-find-bloc)
 
 # Example
 ```dart
@@ -147,6 +185,9 @@ class MyHomePage extends StatelessWidget {
                   videoPlayerController: VideoPlayerController.network(
                     'https://d11b76aq44vj33.cloudfront.net/media/720/video/5def7824adbbc.mp4',
                   ),
+                  subtitleProvider: SubtitleProvider.fromNetwork(
+                    'https://duoidi6ujfbv.cloudfront.net/media/0/subtitles/5675420c9d9a3.vtt'
+                  ),
                 ),
               ),
             );
@@ -156,5 +197,4 @@ class MyHomePage extends StatelessWidget {
     );
   }
 }
-
 ```

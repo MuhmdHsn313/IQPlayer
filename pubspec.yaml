@@ -1,5 +1,5 @@
 name: iqplayer
-description: Simple video player with subtitle.
+description: Simple awesome video player with subtitle (you can load from assets, file, network, string).
 version: 0.1.0
 homepage: https://github.com/MuhmdHsn313/IQPlayer
 

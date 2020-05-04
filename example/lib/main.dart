@@ -43,6 +43,9 @@ class MyHomePage extends StatelessWidget {
                   videoPlayerController: VideoPlayerController.network(
                     'https://d11b76aq44vj33.cloudfront.net/media/720/video/5def7824adbbc.mp4',
                   ),
+                  subtitleProvider: SubtitleProvider.fromNetwork(
+                    'https://duoidi6ujfbv.cloudfront.net/media/0/subtitles/5675420c9d9a3.vtt'
+                  ),
                 ),
               ),
             );

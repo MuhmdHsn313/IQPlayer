@@ -22,7 +22,7 @@ class PlayerBloc extends Bloc<PlayerEvent, PlayerState> {
   ) async* {
     if (event is FetchVideo) {
       yield LoadingState();
-      if (value.buffered.last.end == value.duration) {
+      if (value?.buffered?.last?.end == value?.duration) {
         controller.seekTo(Duration.zero);
         add(PlayVideo());
       } else if (value.hasError || !value.initialized) {
@@ -32,10 +32,10 @@ class PlayerBloc extends Bloc<PlayerEvent, PlayerState> {
     }
 
     if (event is PlayVideo) {
-      if (!value.isPlaying) controller.play();
+      if (value != null) if (!value.isPlaying) controller.play();
       yield PlayingState(
-        duration: value.duration,
-        position: value.position,
+        duration: value?.duration ?? Duration.zero,
+        position: value?.position ?? Duration.zero,
       );
     }
     if (event is PauseVideo) {
@@ -79,8 +79,7 @@ class PlayerBloc extends Bloc<PlayerEvent, PlayerState> {
 
   void _listener() {
     value = controller.value;
-    print((value.buffered.last.end + Duration(seconds: 1)) == value.duration);
-    if (value.buffered.last.end == value.duration) {
+    if (value.buffered?.last?.end == value.duration) {
       add(
         FinishVideo(
           position: value.position,

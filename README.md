@@ -1,18 +1,18 @@
 # IQPlayer
 
-Simple video player with subtitle wrote for flutter.
+Simple video player with subtitle wrote for Flutter.
 
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/Muhmdhsn313/IQPlayer?style=flat-square)
 ![GitHub](https://img.shields.io/github/license/muhmdhsn313/iqplayer?style=flat-square)
 ![GitHub followers](https://img.shields.io/github/followers/muhmdhsn313?style=social)
 
-> This package as a Gift for my teacher and my leader [Mr. Muqtada Al-Sadr](https://twitter.com/Mu_AlSadr).
+> This package as a gift for my teacher and my leader [Mr. Muqtada Al-Sadr](https://twitter.com/Mu_AlSadr).
 
-> Proudly made by [BLoC](https://pub.dev/packages/flutter_bloc).
+> Proudly based on [BLoC](https://pub.dev/packages/flutter_bloc).
 
 ## Features
-1. [x] Play video from Assets, Files, Network by `VideoPlayerController` from video_player.
-2. [x] Parse subtitles from Assets, Files, Network `SubtitleProvider` class.
+1. [x] Play videos from assets, files, network by `VideoPlayerController` from video_player.
+2. [x] Parse subtitles from assets, files, network `SubtitleProvider` class.
 3. [ ] Custom theme you can use with `IQTheme` class.
 4. [x] Support Subtitles:
    1. [x] VTT format
@@ -24,8 +24,8 @@ Simple video player with subtitle wrote for flutter.
 
 
 # Installation
-##  1. Depend on
-Go to `pubspec.yaml` and set the dependencies like:
+##  1. Depends on
+Go to `pubspec.yaml` and add it to the dependencies list like:
 
 ```yaml
 dependencies:
@@ -41,16 +41,16 @@ flutter pub get
 ## 2. Install
 
 ### Android
-Ensure the following permission is present in your Android Manifest file, located in <project root>/android/app/src/main/AndroidManifest.xml:
+Ensure the following permission is presented in your Android Manifest file, located in <project root>/android/app/src/main/AndroidManifest.xml:
 ```xml
 <uses-permission android:name="android.permission.INTERNET"/>
 ```
 The Flutter project template adds it, so it may already be there.
 ### IOS
 
-Warning: The video player is not functional on iOS simulators. An iOS device must be used during development/testing.
+Warning: The video player is not functional on iOS simulators. An IOS device must be used during development/testing.
 
-Add the following entry to your Info.plist file, located in <project root>/ios/Runner/Info.plist:
+Add the following entry into your Info.plist file, located in <project root>/ios/Runner/Info.plist:
 
 ```
 <key>NSAppTransportSecurity</key>
@@ -64,7 +64,7 @@ This entry allows your app to access video files by URL.
 
 ## 3. Import
 
-Now in your Dart code, you can use:
+Now in your Dart files, you can use:
 
 ```dart
 import "package:iqplayer/iqplayer.dart";
@@ -99,7 +99,7 @@ BlocProvider<SubtitleBloc>(
 
 # Using
 
-1. Start use `IQScreen` with Navigator:
+1. Start using `IQScreen` with Navigator:
 
 ```dart
 Navigator.push(

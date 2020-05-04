@@ -1,3 +1,3 @@
-## [0.0.1] - TODO: Add release date.
+## [0.1.0] - Spring.
 
-* TODO: Describe initial release.
+* Added `IQScreen` class that enable user to use a plyer as a screen.

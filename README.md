@@ -10,6 +10,7 @@ Simple video player with subtitle wrote for flutter.
 
 > Proudly made by [BLoC](https://pub.dev/packages/flutter_bloc).
 
+![Screenshot_1588590912](https://user-images.githubusercontent.com/33749659/80967088-75847700-8e1e-11ea-83fc-db6d4c056f26.png)
 ## Features
 1. [x] Play video from Assets, Files, Network by `VideoPlayerController` from video_player.
 2. [x] Parse subtitles from Assets, Files, Network `SubtitleProvider` class.

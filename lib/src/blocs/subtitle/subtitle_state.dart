@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
 import 'package:iqplayer/src/models/subtitle.dart';
 
 class SubtitleState extends Equatable {
@@ -7,9 +6,7 @@ class SubtitleState extends Equatable {
 
   const SubtitleState(this.data);
 
-  factory SubtitleState.initial() => SubtitleState(
-          ''
-      );
+  factory SubtitleState.initial() => SubtitleState('');
 
   SubtitleState copyWith(Subtitle subtitle) =>
       SubtitleState(subtitle.data ?? this.data);

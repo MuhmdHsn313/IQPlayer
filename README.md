@@ -13,14 +13,15 @@ Simple video player with subtitle wrote for flutter.
 ## Features
 1. [x] Play video from Assets, Files, Network by `VideoPlayerController` from video_player.
 2. [x] Parse subtitles from Assets, Files, Network `SubtitleProvider` class.
-3. [ ] Custom theme you can use with `IQTheme` class.
+3. [x] Custom theme you can use with `IQTheme` class.
 4. [x] Support Subtitles:
    1. [x] VTT format
    2. [ ] SRT format
    3. [ ] User define format
 5. [x] **IQScreen:** a video player scaffold screen.
 6. [ ] **IQPlayer:** a widget enable you to watch video implement with your screen.
-7. [x] **IQParser:** a subtitle package that view subtitles, included the widget and parser
+7. [x] **IQParser:** a subtitle package that view subtitles, included the widget and parser.
+8. [x] **IQTheme:** to make your customizations on player ui and make it more integrated with your own app.
 
 # Installation
 ##  1. Depend on
@@ -94,6 +95,21 @@ BlocProvider<SubtitleBloc>(
     child: MyParser(),
 );
 ```
+
+4. **IQTheme:**
+> Note: You can customize your theme on `IQScreen`, `IQPlayer` or `IQParser` with this class.
+
+> You have +17 option to customize theme!
+
+```dart
+ IQScreen(
+    ...
+    iqTheme: IQTheme(
+      ...
+    ),
+ );
+```
+
 # Using
 
 1. Start use `IQScreen` with Navigator:
@@ -138,9 +154,38 @@ class MyParser extends StatelessWidget {
 
 > Note: What is the reason for creating `MyParser`? [see this](https://bloclibrary.dev/#/faqs?id=blocproviderof-fails-to-find-bloc)
 
+
+3. You can use `IQTheme` to customize ui like:
+
+> You have +17 option to customize theme!
+
+```dart
+IQTheme(
+    loadingProgress: SpinKitCircle(
+      color: Colors.red,
+    ),
+    playButtonColor: Colors.transparent,
+    videoPlayedColor: Colors.indigo,
+    playButton: (bool isPlay) {
+    if (isPlay)
+        return Icon(
+            Icons.pause_circle_filled,
+            color: Colors.red,
+            size: 50,
+        );
+    return Icon(
+        Icons.play_circle_outline,
+        color: Colors.red,
+        size: 50,
+        );
+    },
+);
+```
+
 # Example
 ```dart
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:iqplayer/iqplayer.dart';
 
 void main() {
@@ -186,7 +231,26 @@ class MyHomePage extends StatelessWidget {
                     'https://d11b76aq44vj33.cloudfront.net/media/720/video/5def7824adbbc.mp4',
                   ),
                   subtitleProvider: SubtitleProvider.fromNetwork(
-                    'https://duoidi6ujfbv.cloudfront.net/media/0/subtitles/5675420c9d9a3.vtt'
+                      'https://duoidi6ujfbv.cloudfront.net/media/0/subtitles/5675420c9d9a3.vtt'),
+                  iqTheme: IQTheme(
+                    loadingProgress: SpinKitCircle(
+                      color: Colors.red,
+                    ),
+                    playButtonColor: Colors.transparent,
+                    videoPlayedColor: Colors.indigo,
+                    playButton: (bool isPlay) {
+                      if (isPlay)
+                        return Icon(
+                          Icons.pause_circle_filled,
+                          color: Colors.red,
+                          size: 50,
+                        );
+                      return Icon(
+                        Icons.play_circle_outline,
+                        color: Colors.red,
+                        size: 50,
+                      );
+                    },
                   ),
                 ),
               ),

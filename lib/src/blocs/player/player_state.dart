@@ -13,15 +13,18 @@ class LoadingState extends PlayerState {}
 class PlayingState extends PlayerState {
   final Duration duration;
   final Duration position;
+  final bool isPlay;
 
   const PlayingState({
     @required this.duration,
     @required this.position,
-  })  : assert(duration != null),
+    @required this.isPlay,
+  })  : assert(isPlay != null),
+        assert(position != null),
         assert(duration != null);
 
   @override
-  List<Object> get props => [position, duration];
+  List<Object> get props => [position, duration, isPlay];
 }
 
 class FinishState extends PlayingState {
@@ -33,6 +36,7 @@ class FinishState extends PlayingState {
         super(
           position: position,
           duration: duration,
+          isPlay: false,
         );
 }
 

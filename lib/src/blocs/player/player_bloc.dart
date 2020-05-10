@@ -22,48 +22,59 @@ class PlayerBloc extends Bloc<PlayerEvent, PlayerState> {
   ) async* {
     if (event is FetchVideo) {
       yield LoadingState();
-      if (value?.buffered?.last?.end == value?.duration) {
-        controller.seekTo(Duration.zero);
+      value = controller.value;
+      if (value.initialized) {
+        await controller.initialize();
         add(PlayVideo());
-      } else if (value.hasError || !value.initialized) {
+      } else if (value.hasError) {
         controller.initialize();
         add(PlayVideo());
+      } else if (value.buffered.isNotEmpty) {
+        if (value.buffered.last.end == value.duration) {
+          controller.seekTo(Duration.zero);
+          add(PlayVideo());
+        }
       }
     }
 
     if (event is PlayVideo) {
-      if (value != null) if (!value.isPlaying) controller.play();
+      if (value != null) if (!value.isPlaying) await controller.play();
       yield PlayingState(
+        isPlay: value.isPlaying,
         duration: value?.duration ?? Duration.zero,
         position: value?.position ?? Duration.zero,
       );
     }
     if (event is PauseVideo) {
-      if (value.isPlaying) controller.pause();
+      if (value.isPlaying) await controller.pause();
       yield PlayingState(
+        isPlay: value.isPlaying,
         duration: value.duration,
         position: value.position,
       );
     }
     if (event is Forward) {
       Duration newPosition = value.position + Duration(seconds: 10);
-      controller.seekTo(newPosition);
+      await controller.seekTo(newPosition);
       yield PlayingState(
+        isPlay: value.isPlaying,
         duration: value.duration,
         position: newPosition,
       );
     }
     if (event is Backward) {
       Duration newPosition = value.position - Duration(seconds: 5);
-      controller.seekTo(newPosition);
+      await controller.seekTo(newPosition);
       yield PlayingState(
+        isPlay: value.isPlaying,
         duration: value.duration,
         position: newPosition,
       );
     }
     if (event is ChangeTimeTo) {
-      controller.seekTo(event.duration);
+      await controller.seekTo(event.duration);
       yield PlayingState(
+        isPlay: value.isPlaying,
         duration: value.duration,
         position: value.position,
       );
@@ -79,7 +90,9 @@ class PlayerBloc extends Bloc<PlayerEvent, PlayerState> {
 
   void _listener() {
     value = controller.value;
-    if (value.buffered?.last?.end == value.duration) {
+    if (value.buffered != null && value.buffered.isNotEmpty) if (value
+            .buffered.last.end ==
+        value.duration) {
       add(
         FinishVideo(
           position: value.position,
@@ -88,9 +101,11 @@ class PlayerBloc extends Bloc<PlayerEvent, PlayerState> {
       );
       return;
     }
-    if (value.buffered.last.end == value.position) {
-      add(FetchVideo());
-      return;
+    if (value.buffered.isNotEmpty) {
+      if (value.buffered.last.end == value.position) {
+        add(FetchVideo());
+        return;
+      }
     }
     if (value.initialized && value.isPlaying) {
       add(PlayVideo());

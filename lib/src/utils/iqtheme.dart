@@ -16,11 +16,13 @@ class IQTheme {
 
   final Widget forwardIconButton;
   final Widget backwardIconButton;
-  final Widget playButton;
   final Widget replayButton;
   final Widget loadingProgress;
 
   final IQErrorBuilder errorWidget;
+  final IQPlayButtonBuilder playButton;
+  final IQLockButtonBuilder lockScreen;
+  final IQLockButtonBuilder lockRotation;
 
   const IQTheme({
     this.loadingProgressColor,
@@ -39,5 +41,7 @@ class IQTheme {
     this.replayButton,
     this.errorWidget,
     this.loadingProgress,
+    this.lockScreen,
+    this.lockRotation,
   });
 }

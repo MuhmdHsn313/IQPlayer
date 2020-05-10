@@ -4,6 +4,7 @@ import 'package:iqplayer/src/blocs/player/bloc.dart';
 import 'package:iqplayer/src/blocs/screen/screen_bloc.dart';
 import 'package:iqplayer/src/blocs/subtitle/bloc.dart';
 import 'package:iqplayer/src/ui/screen_controllers.dart';
+import 'package:iqplayer/src/utils/iqtheme.dart';
 import 'package:iqplayer/src/utils/subtitle_provider.dart';
 import 'package:video_player/video_player.dart';
 
@@ -12,11 +13,13 @@ class IQScreen extends StatefulWidget {
   final String description;
   final VideoPlayerController videoPlayerController;
   final SubtitleProvider subtitleProvider;
+  final IQTheme iqTheme;
 
   const IQScreen({
     Key key,
     @required this.title,
     @required this.videoPlayerController,
+    this.iqTheme: const IQTheme(),
     this.description: '',
     this.subtitleProvider,
   })  : assert(title != null),
@@ -39,6 +42,8 @@ class _IQScreenState extends State<IQScreen>
       widget.videoPlayerController;
 
   SubtitleProvider get subtitleProvider => widget.subtitleProvider;
+
+  IQTheme get iqTheme => widget.iqTheme;
 
   @override
   void initState() {
@@ -96,6 +101,7 @@ class _IQScreenState extends State<IQScreen>
                 ),
               ],
               child: ScreenControllers(
+                iqTheme: iqTheme,
                 playAnimationController: playAnimationController,
               ),
             ),

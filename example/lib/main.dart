@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:iqplayer/iqplayer.dart';
 
 void main() {
@@ -44,7 +45,26 @@ class MyHomePage extends StatelessWidget {
                     'https://d11b76aq44vj33.cloudfront.net/media/720/video/5def7824adbbc.mp4',
                   ),
                   subtitleProvider: SubtitleProvider.fromNetwork(
-                    'https://duoidi6ujfbv.cloudfront.net/media/0/subtitles/5675420c9d9a3.vtt'
+                      'https://duoidi6ujfbv.cloudfront.net/media/0/subtitles/5675420c9d9a3.vtt'),
+                  iqTheme: IQTheme(
+                    loadingProgress: SpinKitCircle(
+                      color: Colors.red,
+                    ),
+                    playButtonColor: Colors.transparent,
+                    videoPlayedColor: Colors.indigo,
+                    playButton: (bool isPlay) {
+                      if (isPlay)
+                        return Icon(
+                          Icons.pause_circle_filled,
+                          color: Colors.red,
+                          size: 50,
+                        );
+                      return Icon(
+                        Icons.play_circle_outline,
+                        color: Colors.red,
+                        size: 50,
+                      );
+                    },
                   ),
                 ),
               ),

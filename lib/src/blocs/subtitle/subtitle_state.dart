@@ -1,6 +1,9 @@
 import 'package:equatable/equatable.dart';
-import 'package:iqplayer/src/models/subtitle.dart';
 
+import '../../models/subtitle.dart';
+
+///! The user have not to use this class.
+/// This class provide the state of subtitles!
 class SubtitleState extends Equatable {
   final String data;
 

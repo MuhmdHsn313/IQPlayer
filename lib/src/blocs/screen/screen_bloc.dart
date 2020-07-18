@@ -4,6 +4,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import './bloc.dart';
 
+///! The user have not to use this class.
+/// This class manage the state of ui not the player!
 class ScreenBloc extends Bloc<ScreenEvent, ScreenState> {
   final String title;
   final String description;
@@ -11,12 +13,9 @@ class ScreenBloc extends Bloc<ScreenEvent, ScreenState> {
   ScreenBloc({
     @required this.title,
     @required this.description,
-  });
-
-  @override
-  ScreenState get initialState {
+  }) : super(ScreenState.showControls()) {
     _hideStateBar();
-    return ScreenState.showControls();
+    _enableRotation();
   }
 
   @override

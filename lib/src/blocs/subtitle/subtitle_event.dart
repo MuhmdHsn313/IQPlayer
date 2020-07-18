@@ -1,5 +1,7 @@
 import 'package:equatable/equatable.dart';
 
+///! The user have not to use this class.
+/// This class provide the event of subtitles!
 abstract class SubtitleEvent extends Equatable {
   const SubtitleEvent();
 

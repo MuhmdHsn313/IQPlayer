@@ -1,4 +1,11 @@
-## [0.3.0] - Frost.
+## [0.4.0] - Permanence.
+
+* Support `Html` & `Css` styles.
+* Fixed player bugs.
+* Enhance code logic.
+* Provide a dartdoc comments for all package.
+
+## [0.3.0-beta.1] - Frost.
 
 * Added `IQTheme` to customization your ui.
 * Fixed bugs with forward & backward.

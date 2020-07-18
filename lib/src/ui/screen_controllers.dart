@@ -1,12 +1,13 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:iqplayer/src/blocs/player/bloc.dart';
-import 'package:iqplayer/src/blocs/screen/bloc.dart';
-import 'package:iqplayer/src/utils/iqtheme.dart';
 
+import '../blocs/player/bloc.dart';
+import '../blocs/screen/bloc.dart';
+import '../utils/iqtheme.dart';
 import 'iqparser.dart';
 
+///! The user have not to use this class.
+/// The ui of [IQScreen].
 class ScreenControllers extends StatelessWidget {
   final AnimationController playAnimationController;
   final IQTheme iqTheme;
@@ -76,7 +77,7 @@ class ScreenControllers extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         IQParser(
-                          iqTheme: iqTheme,
+                          subtitleDefaultTextStyle: iqTheme.subtitleStyle,
                         ),
                         _buildBottomScreen(context, state),
                       ],
@@ -139,7 +140,7 @@ class ScreenControllers extends StatelessWidget {
                                     iqTheme.replayButton ?? Icon(Icons.replay),
                                 onPressed: () {
                                   BlocProvider.of<PlayerBloc>(context)
-                                      .add(FetchVideo());
+                                      .add(ReplayVideo());
                                 },
                               ),
                             );
@@ -149,9 +150,13 @@ class ScreenControllers extends StatelessWidget {
                       ),
                     ),
                     Positioned(
+                      left: 0,
+                      right: 0,
                       bottom: 25,
-                      child: IQParser(
-                        iqTheme: iqTheme,
+                      child: Center(
+                        child: IQParser(
+                          subtitleDefaultTextStyle: iqTheme.subtitleStyle,
+                        ),
                       ),
                     ),
                   ],
@@ -188,7 +193,8 @@ class ScreenControllers extends StatelessWidget {
       actions: <Widget>[
         IconButton(
           icon: iqTheme.lockRotation != null
-              ? iqTheme.lockRotation(state.lockRotation)
+              ? iqTheme.lockRotation(
+                  context, state.lockRotation, playAnimationController)
               : Icon(
                   state.lockRotation
                       ? Icons.screen_lock_rotation
@@ -204,7 +210,8 @@ class ScreenControllers extends StatelessWidget {
         ),
         IconButton(
           icon: iqTheme.lockScreen != null
-              ? iqTheme.lockScreen(state.lockScreen)
+              ? iqTheme.lockScreen(
+                  context, state.lockScreen, playAnimationController)
               : Icon(
                   state.lockScreen ? Icons.lock : Icons.lock_open,
                   color: iqTheme.lockScreenColor,
@@ -229,32 +236,35 @@ class ScreenControllers extends StatelessWidget {
             child: Row(
               mainAxisSize: MainAxisSize.max,
               children: <Widget>[
-                Text(
-                  _formatDuration(state.position),
-                  style:
-                      iqTheme.durationStyle ?? TextStyle(color: Colors.white),
-                ),
-                Expanded(
-                  child: Slider(
-                    value: state.position.inSeconds.toDouble(),
-                    min: Duration.zero.inSeconds.toDouble(),
-                    max: state.duration.inSeconds.toDouble(),
-                    activeColor: iqTheme.videoPlayedColor ?? Colors.green,
-                    inactiveColor:
-                        iqTheme.backgroundProgressColor ?? Colors.green[200],
-                    onChanged: (value) =>
-                        BlocProvider.of<PlayerBloc>(context).add(
-                      ChangeTimeTo(
-                        Duration(seconds: value.toInt()),
+                if (state.position != null)
+                  Text(
+                    _formatDuration(state.position),
+                    style:
+                        iqTheme.durationStyle ?? TextStyle(color: Colors.white),
+                  ),
+                if (state.duration != null)
+                  Expanded(
+                    child: Slider(
+                      value: state.position.inSeconds.toDouble(),
+                      min: Duration.zero.inSeconds.toDouble(),
+                      max: state.duration.inSeconds.toDouble(),
+                      activeColor: iqTheme.videoPlayedColor ?? Colors.green,
+                      inactiveColor:
+                          iqTheme.backgroundProgressColor ?? Colors.green[200],
+                      onChanged: (value) =>
+                          BlocProvider.of<PlayerBloc>(context).add(
+                        ChangeTimeTo(
+                          Duration(seconds: value.toInt()),
+                        ),
                       ),
                     ),
                   ),
-                ),
-                Text(
-                  _formatDuration(state.duration),
-                  style:
-                      iqTheme.durationStyle ?? TextStyle(color: Colors.white),
-                ),
+                if (state.duration != null)
+                  Text(
+                    _formatDuration(state.duration),
+                    style:
+                        iqTheme.durationStyle ?? TextStyle(color: Colors.white),
+                  ),
               ],
             ),
           );
@@ -311,7 +321,8 @@ class ScreenControllers extends StatelessWidget {
               icon: state is FinishState
                   ? iqTheme.replayButton ?? Icon(Icons.replay)
                   : iqTheme.playButton != null
-                      ? iqTheme.playButton(state.isPlay)
+                      ? iqTheme.playButton(
+                          context, state.isPlay, playAnimationController)
                       : AnimatedIcon(
                           icon: AnimatedIcons.pause_play,
                           progress: Tween<double>(begin: 0.0, end: 1.0).animate(
@@ -321,7 +332,7 @@ class ScreenControllers extends StatelessWidget {
               onPressed: () {
                 if (state is FinishState) {
                   print('FetchVideo');
-                  BlocProvider.of<PlayerBloc>(context).add(FetchVideo());
+                  BlocProvider.of<PlayerBloc>(context).add(ReplayVideo());
                   return;
                 }
                 print(state.isPlay);
@@ -352,7 +363,25 @@ class ScreenControllers extends StatelessWidget {
                   Text('${state.error}'),
                 ],
               );
-
+        if (state is FinishState)
+          return Container(
+            decoration: BoxDecoration(
+              color: iqTheme.playButtonColor ?? Colors.green,
+              borderRadius: BorderRadius.circular(50),
+              boxShadow: iqTheme.replayButton != null
+                  ? []
+                  : [
+                      BoxShadow(color: Colors.black45),
+                    ],
+            ),
+            child: IconButton(
+              color: Colors.white,
+              icon: iqTheme.replayButton ?? Icon(Icons.replay),
+              onPressed: () {
+                BlocProvider.of<PlayerBloc>(context).add(ReplayVideo());
+              },
+            ),
+          );
         return iqTheme.loadingProgress ??
             CircularProgressIndicator(
               valueColor: AlwaysStoppedAnimation<Color>(

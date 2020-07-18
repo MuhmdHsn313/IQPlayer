@@ -1,6 +1,9 @@
 import 'package:flutter/widgets.dart';
-import 'package:iqplayer/src/utils/public_type.dart';
 
+import 'public_type.dart';
+
+/// This class contorl theme of player, give this class the
+/// value you need to change, else you can let it null!
 class IQTheme {
   final Color loadingProgressColor;
   final Color playButtonColor;

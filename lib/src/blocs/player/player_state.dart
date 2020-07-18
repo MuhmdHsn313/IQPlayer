@@ -1,6 +1,8 @@
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
+///! The user have not to use this class.
+/// This class provide the state of player not the ui!
 abstract class PlayerState extends Equatable {
   const PlayerState();
 
@@ -11,34 +13,22 @@ abstract class PlayerState extends Equatable {
 class LoadingState extends PlayerState {}
 
 class PlayingState extends PlayerState {
+  final bool isPlay;
   final Duration duration;
   final Duration position;
-  final bool isPlay;
 
   const PlayingState({
+    @required this.isPlay,
     @required this.duration,
     @required this.position,
-    @required this.isPlay,
   })  : assert(isPlay != null),
-        assert(position != null),
-        assert(duration != null);
+        assert(position != null);
 
   @override
-  List<Object> get props => [position, duration, isPlay];
+  List<Object> get props => [isPlay, position, duration];
 }
 
-class FinishState extends PlayingState {
-  const FinishState({
-    @required Duration duration,
-    @required Duration position,
-  })  : assert(duration != null),
-        assert(duration != null),
-        super(
-          position: position,
-          duration: duration,
-          isPlay: false,
-        );
-}
+class FinishState extends PlayerState {}
 
 class ErrorState extends PlayerState {
   final dynamic error;

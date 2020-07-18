@@ -1,6 +1,8 @@
 import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
 
+///! The user have not to use this class.
+/// This model class contorl the subtitle data.
 class Subtitle extends Equatable {
   final Duration start;
   final Duration end;

@@ -1,6 +1,8 @@
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
+///! The user have not to use this class.
+/// This class provide the state of ui not the player!
 class ScreenState extends Equatable {
   final bool lockScreen;
   final bool showControls;

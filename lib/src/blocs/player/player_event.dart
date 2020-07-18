@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
 
+///! The user have not to use this class.
+/// This class provide the event of player not the ui!
 abstract class PlayerEvent extends Equatable {
   const PlayerEvent();
 
@@ -8,41 +9,28 @@ abstract class PlayerEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class FetchVideo extends PlayerEvent {}
+class FetchData extends PlayerEvent {}
+
+class UpdateData extends PlayerEvent {
+  final Duration position;
+  final Duration duration;
+  final bool loading;
+
+  const UpdateData(this.position, this.duration, [this.loading = false]);
+
+  @override
+  List<Object> get props => [position, duration, loading];
+
+  @override
+  String toString() =>
+      "position: $position, duration: $duration, loading: $loading";
+}
 
 class PlayVideo extends PlayerEvent {}
 
 class PauseVideo extends PlayerEvent {}
 
-class FinishVideo extends PlayerEvent {
-  final Duration duration;
-  final Duration position;
-
-  const FinishVideo({
-    @required this.duration,
-    @required this.position,
-  })  : assert(duration != null),
-        assert(duration != null);
-
-  @override
-  List<Object> get props => [position, duration];
-}
-
-class Forward extends PlayerEvent {}
-
-class Backward extends PlayerEvent {}
-
-class HandleError extends PlayerEvent {
-  final dynamic error;
-
-  const HandleError(this.error);
-
-  @override
-  List<Object> get props => [error];
-
-  @override
-  String toString() => "HandleError { error: $error }";
-}
+class ReplayVideo extends PlayerEvent {}
 
 class ChangeTimeTo extends PlayerEvent {
   final Duration duration;
@@ -54,4 +42,20 @@ class ChangeTimeTo extends PlayerEvent {
 
   @override
   String toString() => "ChangeTimeTo { duration: $duration }";
+}
+
+class Forward extends ChangeTimeTo {
+  const Forward([
+    Duration duration = const Duration(seconds: 10),
+  ]) : super(duration);
+  @override
+  String toString() => "Forward { duration: $duration }";
+}
+
+class Backward extends ChangeTimeTo {
+  const Backward([
+    Duration duration = const Duration(seconds: 5),
+  ]) : super(duration);
+  @override
+  String toString() => "Backward { duration: $duration }";
 }

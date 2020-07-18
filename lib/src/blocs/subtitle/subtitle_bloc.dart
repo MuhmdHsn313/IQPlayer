@@ -1,10 +1,14 @@
 import 'dart:async';
-import 'package:bloc/bloc.dart';
-import 'package:iqplayer/src/models/subtitle.dart';
-import 'package:iqplayer/src/utils/subtitle_provider.dart';
-import 'package:iqplayer/src/utils/subtitle_controller.dart';
-import './bloc.dart';
 
+import 'package:bloc/bloc.dart';
+
+import './bloc.dart';
+import '../../models/subtitle.dart';
+import '../../utils/subtitle_controller.dart';
+import '../../utils/subtitle_provider.dart';
+
+///! The user have not to use this class.
+/// This class manage the state of subtitles!
 class SubtitleBloc extends Bloc<SubtitleEvent, SubtitleState> {
   final SubtitleProvider _subtitleProvider;
   final SubtitleController _subtitleController;
@@ -13,10 +17,8 @@ class SubtitleBloc extends Bloc<SubtitleEvent, SubtitleState> {
 
   SubtitleBloc(this._subtitleProvider)
       : subtitles = new List<Subtitle>(),
-        _subtitleController = new SubtitleController();
-
-  @override
-  SubtitleState get initialState => SubtitleState.initial();
+        _subtitleController = new SubtitleController(),
+        super(SubtitleState.initial());
 
   @override
   Stream<SubtitleState> mapEventToState(
@@ -27,15 +29,16 @@ class SubtitleBloc extends Bloc<SubtitleEvent, SubtitleState> {
     }
 
     if (event is UpdateSubtitle) {
-      for (Subtitle subtitle in subtitles) {
-        if (event.position >= subtitle.start &&
-            event.position <= subtitle.end) {
-          yield SubtitleState(subtitle.data);
-          break;
-        } else {
-          yield SubtitleState.initial();
+      if (event.position != null)
+        for (Subtitle subtitle in subtitles) {
+          if (event.position >= subtitle.start &&
+              event.position <= subtitle.end) {
+            yield SubtitleState(subtitle.data);
+            break;
+          } else {
+            yield SubtitleState.initial();
+          }
         }
-      }
     }
   }
 }

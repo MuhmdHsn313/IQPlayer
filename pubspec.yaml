@@ -1,6 +1,6 @@
 name: iqplayer
 description: Simple awesome video player with subtitle (you can load from assets, file, network, string).
-version: 0.2.1
+version: 0.4.0
 homepage: https://github.com/MuhmdHsn313/IQPlayer
 
 environment:
@@ -9,18 +9,20 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_bloc: ^4.0.0
-  equatable: ^1.1.1
-  video_player: ^0.10.9+1
-  http: ^0.12.1
+  flutter_bloc: ^5.0.1
+  equatable: ^1.2.2
+  video_player: ^0.10.11+2
+  http: ^0.12.2
   screen: ^0.0.5
+  simple_html_css: ^2.0.0+2
+  bloc: ^5.0.1
   meta: ^1.1.8
-  bloc: ^4.0.0
+  auto_orientation: ^1.0.6
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  bloc_test: ^5.0.0
+  bloc_test: ^6.0.1
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 

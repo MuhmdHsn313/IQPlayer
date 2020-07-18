@@ -1,6 +1,8 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 
+///! The user have not to use this class.
+/// This class provide the event of ui not the player!
 abstract class ScreenEvent extends Equatable {
   const ScreenEvent();
 

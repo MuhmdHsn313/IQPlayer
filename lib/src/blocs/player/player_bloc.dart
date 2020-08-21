@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:auto_orientation/auto_orientation.dart';
 import 'package:bloc/bloc.dart';
 import 'package:video_player/video_player.dart';
 
@@ -16,7 +15,6 @@ class PlayerBloc extends Bloc<PlayerEvent, PlayerState> {
 
   PlayerBloc(this.controller) : super(LoadingState()) {
     controller.addListener(_listener);
-    AutoOrientation.fullAutoMode();
   }
 
   @override

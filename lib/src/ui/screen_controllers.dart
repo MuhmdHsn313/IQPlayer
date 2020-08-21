@@ -23,7 +23,7 @@ class ScreenControllers extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ScreenBloc, ScreenState>(
-      bloc: BlocProvider.of<ScreenBloc>(context),
+      cubit: BlocProvider.of<ScreenBloc>(context),
       builder: (context, state) => GestureDetector(
         onTap: () => BlocProvider.of<ScreenBloc>(context).add(
           state.showControls ? HideControls() : ShowControls(),
@@ -113,7 +113,7 @@ class ScreenControllers extends StatelessWidget {
                     Container(
                       alignment: Alignment.center,
                       child: BlocBuilder<PlayerBloc, PlayerState>(
-                        bloc: BlocProvider.of<PlayerBloc>(context),
+                        cubit: BlocProvider.of<PlayerBloc>(context),
                         builder: (BuildContext context, PlayerState state) {
                           if (state is LoadingState)
                             return iqTheme.loadingProgress ??
@@ -227,7 +227,7 @@ class ScreenControllers extends StatelessWidget {
 
   Widget _buildBottomScreen(BuildContext context, ScreenState state) {
     return BlocBuilder<PlayerBloc, PlayerState>(
-      bloc: BlocProvider.of<PlayerBloc>(context),
+      cubit: BlocProvider.of<PlayerBloc>(context),
       builder: (context, state) {
         if (state is PlayingState)
           return Container(
@@ -303,7 +303,7 @@ class ScreenControllers extends StatelessWidget {
 
   Widget _mainButton(BuildContext context) {
     return BlocBuilder<PlayerBloc, PlayerState>(
-      bloc: BlocProvider.of<PlayerBloc>(context),
+      cubit: BlocProvider.of<PlayerBloc>(context),
       builder: (BuildContext context, PlayerState state) {
         if (state is PlayingState)
           return Container(

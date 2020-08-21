@@ -36,7 +36,7 @@ class IQParser extends StatelessWidget {
   Widget build(BuildContext context) {
     try {
       return BlocListener<PlayerBloc, PlayerState>(
-        bloc: BlocProvider.of<PlayerBloc>(context),
+        cubit: BlocProvider.of<PlayerBloc>(context),
         listener: (context, state) {
           if (state is PlayingState)
             BlocProvider.of<SubtitleBloc>(context).add(
@@ -44,7 +44,7 @@ class IQParser extends StatelessWidget {
             );
         },
         child: BlocBuilder<SubtitleBloc, SubtitleState>(
-          bloc: BlocProvider.of<SubtitleBloc>(context),
+          cubit: BlocProvider.of<SubtitleBloc>(context),
           builder: (context, state) => Container(
             child: state.data == null
                 ? null

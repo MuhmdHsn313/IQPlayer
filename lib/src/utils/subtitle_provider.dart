@@ -1,3 +1,5 @@
+library iqplayer.util;
+
 import 'dart:async';
 import 'dart:io';
 
@@ -7,8 +9,7 @@ import '../repositories/subtitle_repository.dart';
 class SubtitleProvider {
   final FutureOr<String> data;
 
-  const SubtitleProvider._(this.data)
-      : assert(data != null, 'Error, data received as null!');
+  const SubtitleProvider._(this.data);
 
   /// Network: use [SubtitleProvider.fromNetwork()] and give it a url, for example:
   ///   ```dart

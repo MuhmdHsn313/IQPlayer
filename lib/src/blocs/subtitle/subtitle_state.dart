@@ -11,8 +11,12 @@ class SubtitleState extends Equatable {
 
   factory SubtitleState.initial() => SubtitleState('');
 
-  SubtitleState copyWith(Subtitle subtitle) =>
-      SubtitleState(subtitle.data ?? this.data);
+  SubtitleState copyWith({
+    Subtitle? subtitle,
+  }) {
+    if (subtitle != null) return SubtitleState(subtitle.data);
+    return SubtitleState(this.data);
+  }
 
   @override
   List<Object> get props => [data];

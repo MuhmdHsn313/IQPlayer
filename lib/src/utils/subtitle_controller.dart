@@ -1,3 +1,5 @@
+library iqplayer.util;
+
 import 'dart:async';
 
 import '../models/subtitle.dart';
@@ -45,20 +47,20 @@ class SubtitleController {
     content = subList.join('\n');
 
     List<RegExpMatch> matches = regExp.allMatches(content).toList();
-    List<Subtitle> subtitleList = List<Subtitle>();
+    List<Subtitle> subtitleList = <Subtitle>[];
 
     matches.forEach(
       (RegExpMatch regExpMatch) {
-        int startTimeHours = int.parse(regExpMatch.group(1));
-        int startTimeMinutes = int.parse(regExpMatch.group(2));
-        int startTimeSeconds = int.parse(regExpMatch.group(3));
-        int startTimeMilliseconds = int.parse(regExpMatch.group(4));
+        int startTimeHours = int.parse(regExpMatch.group(1)!);
+        int startTimeMinutes = int.parse(regExpMatch.group(2)!);
+        int startTimeSeconds = int.parse(regExpMatch.group(3)!);
+        int startTimeMilliseconds = int.parse(regExpMatch.group(4)!);
 
-        int endTimeHours = int.parse(regExpMatch.group(5));
-        int endTimeMinutes = int.parse(regExpMatch.group(6));
-        int endTimeSeconds = int.parse(regExpMatch.group(7));
-        int endTimeMilliseconds = int.parse(regExpMatch.group(8));
-        String text = regExpMatch.group(9);
+        int endTimeHours = int.parse(regExpMatch.group(5)!);
+        int endTimeMinutes = int.parse(regExpMatch.group(6)!);
+        int endTimeSeconds = int.parse(regExpMatch.group(7)!);
+        int endTimeMilliseconds = int.parse(regExpMatch.group(8)!);
+        String text = regExpMatch.group(9)!;
 
         Duration startTime = Duration(
             hours: startTimeHours,

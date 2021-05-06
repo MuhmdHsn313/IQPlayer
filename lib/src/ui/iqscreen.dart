@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:video_player/video_player.dart';
 
-import '../blocs/player/bloc.dart';
+import '../blocs/player/player_bloc.dart';
 import '../blocs/screen/screen_bloc.dart';
 import '../blocs/subtitle/bloc.dart';
 import '../utils/iqtheme.dart';
@@ -21,21 +21,19 @@ class IQScreen extends StatefulWidget {
   final VideoPlayerController videoPlayerController;
 
   /// Provide a subtitle to display it.
-  final SubtitleProvider subtitleProvider;
+  final SubtitleProvider? subtitleProvider;
 
   /// You make your customization on theme.
   final IQTheme iqTheme;
 
   const IQScreen({
-    Key key,
-    @required this.title,
-    @required this.videoPlayerController,
+    Key? key,
+    required this.title,
+    required this.videoPlayerController,
     this.iqTheme: const IQTheme(),
     this.description: '',
     this.subtitleProvider,
-  })  : assert(title != null),
-        assert(videoPlayerController != null),
-        super(key: key);
+  }) : super(key: key);
 
   @override
   _IQScreenState createState() => _IQScreenState();
@@ -43,7 +41,7 @@ class IQScreen extends StatefulWidget {
 
 class _IQScreenState extends State<IQScreen>
     with SingleTickerProviderStateMixin {
-  AnimationController playAnimationController;
+  late AnimationController playAnimationController;
 
   String get title => widget.title;
 
@@ -52,7 +50,7 @@ class _IQScreenState extends State<IQScreen>
   VideoPlayerController get videoPlayerController =>
       widget.videoPlayerController;
 
-  SubtitleProvider get subtitleProvider => widget.subtitleProvider;
+  SubtitleProvider? get subtitleProvider => widget.subtitleProvider;
 
   IQTheme get iqTheme => widget.iqTheme;
 
@@ -109,7 +107,7 @@ class _IQScreenState extends State<IQScreen>
                 if (widget.subtitleProvider != null)
                   BlocProvider<SubtitleBloc>(
                     create: (context) =>
-                        SubtitleBloc(subtitleProvider)..add(FetchSubtitles()),
+                        SubtitleBloc(subtitleProvider!)..add(FetchSubtitles()),
                   ),
               ],
               child: ScreenControllers(

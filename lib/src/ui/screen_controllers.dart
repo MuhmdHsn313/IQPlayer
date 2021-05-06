@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../blocs/player/bloc.dart';
+import '../blocs/player/player_bloc.dart';
 import '../blocs/screen/bloc.dart';
 import '../utils/iqtheme.dart';
 import 'iqparser.dart';
@@ -13,12 +13,10 @@ class ScreenControllers extends StatelessWidget {
   final IQTheme iqTheme;
 
   const ScreenControllers({
-    Key key,
-    @required this.playAnimationController,
-    @required this.iqTheme,
-  })  : assert(iqTheme != null),
-        assert(playAnimationController != null),
-        super(key: key);
+    Key? key,
+    required this.playAnimationController,
+    required this.iqTheme,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +75,7 @@ class ScreenControllers extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         IQParser(
-                          subtitleDefaultTextStyle: iqTheme.subtitleStyle,
+                          subtitleDefaultTextStyle: iqTheme.subtitleStyle!,
                         ),
                         _buildBottomScreen(context, state),
                       ],
@@ -193,7 +191,7 @@ class ScreenControllers extends StatelessWidget {
       actions: <Widget>[
         IconButton(
           icon: iqTheme.lockRotation != null
-              ? iqTheme.lockRotation(
+              ? iqTheme.lockRotation!(
                   context, state.lockRotation, playAnimationController)
               : Icon(
                   state.lockRotation
@@ -210,7 +208,7 @@ class ScreenControllers extends StatelessWidget {
         ),
         IconButton(
           icon: iqTheme.lockScreen != null
-              ? iqTheme.lockScreen(
+              ? iqTheme.lockScreen!(
                   context, state.lockScreen, playAnimationController)
               : Icon(
                   state.lockScreen ? Icons.lock : Icons.lock_open,
@@ -236,30 +234,27 @@ class ScreenControllers extends StatelessWidget {
             child: Row(
               mainAxisSize: MainAxisSize.max,
               children: <Widget>[
-                if (state.position != null)
-                  Text(
-                    _formatDuration(state.position),
-                    style:
-                        iqTheme.durationStyle ?? TextStyle(color: Colors.white),
-                  ),
-                if (state.duration != null)
-                  Expanded(
-                    child: Slider(
-                      value: state.position.inSeconds.toDouble(),
-                      min: Duration.zero.inSeconds.toDouble(),
-                      max: state.duration.inSeconds.toDouble(),
-                      activeColor: iqTheme.videoPlayedColor ?? Colors.green,
-                      inactiveColor:
-                          iqTheme.backgroundProgressColor ?? Colors.green[200],
-                      onChanged: (value) =>
-                          BlocProvider.of<PlayerBloc>(context).add(
-                        ChangeTimeTo(
-                          Duration(seconds: value.toInt()),
-                        ),
+                Text(
+                  _formatDuration(state.position),
+                  style:
+                      iqTheme.durationStyle ?? TextStyle(color: Colors.white),
+                ),
+                Expanded(
+                  child: Slider(
+                    value: state.position.inSeconds.toDouble(),
+                    min: Duration.zero.inSeconds.toDouble(),
+                    max: state.duration.inSeconds.toDouble(),
+                    activeColor: iqTheme.videoPlayedColor ?? Colors.green,
+                    inactiveColor:
+                        iqTheme.backgroundProgressColor ?? Colors.green[200],
+                    onChanged: (value) =>
+                        BlocProvider.of<PlayerBloc>(context).add(
+                      ChangeTimeTo(
+                        Duration(seconds: value.toInt()),
                       ),
                     ),
                   ),
-                if (state.duration != null)
+                ),
                   Text(
                     _formatDuration(state.duration),
                     style:
@@ -321,7 +316,7 @@ class ScreenControllers extends StatelessWidget {
               icon: state is FinishState
                   ? iqTheme.replayButton ?? Icon(Icons.replay)
                   : iqTheme.playButton != null
-                      ? iqTheme.playButton(
+                      ? iqTheme.playButton!(
                           context, state.isPlay, playAnimationController)
                       : AnimatedIcon(
                           icon: AnimatedIcons.pause_play,
@@ -352,17 +347,7 @@ class ScreenControllers extends StatelessWidget {
             ),
           );
 
-        if (state is ErrorState)
-          return iqTheme.errorWidget ??
-              Row(
-                children: <Widget>[
-                  Icon(
-                    Icons.error,
-                    color: Colors.white,
-                  ),
-                  Text('${state.error}'),
-                ],
-              );
+        if (state is ErrorState) return errorWidget(context, state);
         if (state is FinishState)
           return Container(
             decoration: BoxDecoration(
@@ -392,8 +377,23 @@ class ScreenControllers extends StatelessWidget {
     );
   }
 
+  Widget errorWidget(context, state) {
+    if (iqTheme.errorWidget != null)
+      return iqTheme.errorWidget!(context, state.error);
+
+    return Row(
+      children: <Widget>[
+        Icon(
+          Icons.error,
+          color: Colors.white,
+        ),
+        Text('${state.error}'),
+      ],
+    );
+  }
+
   String _formatDuration(Duration position) {
-    final ms = position?.inMilliseconds ?? 0;
+    final ms = position.inMilliseconds;
 
     int seconds = ms ~/ 1000;
     final int hours = seconds ~/ 3600;
@@ -401,13 +401,23 @@ class ScreenControllers extends StatelessWidget {
     var minutes = seconds ~/ 60;
     seconds = seconds % 60;
 
-    final hoursString = hours >= 10 ? '$hours' : hours == 0 ? '00' : '0$hours';
+    final hoursString = hours >= 10
+        ? '$hours'
+        : hours == 0
+            ? '00'
+            : '0$hours';
 
-    final minutesString =
-        minutes >= 10 ? '$minutes' : minutes == 0 ? '00' : '0$minutes';
+    final minutesString = minutes >= 10
+        ? '$minutes'
+        : minutes == 0
+            ? '00'
+            : '0$minutes';
 
-    final secondsString =
-        seconds >= 10 ? '$seconds' : seconds == 0 ? '00' : '0$seconds';
+    final secondsString = seconds >= 10
+        ? '$seconds'
+        : seconds == 0
+            ? '00'
+            : '0$seconds';
 
     final formattedTime =
         '${hoursString == '00' ? '' : hoursString + ':'}$minutesString:$secondsString';

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:simple_html_css/simple_html_css.dart';
 
-import '../blocs/player/bloc.dart';
+import '../blocs/player/player_bloc.dart';
 import '../blocs/subtitle/bloc.dart';
 
 /// This widget for display subtitle, you can use only with bloc:
@@ -25,11 +25,11 @@ import '../blocs/subtitle/bloc.dart';
 /// ```
 class IQParser extends StatelessWidget {
   /// To customization your text style of subtitle.
-  final TextStyle subtitleDefaultTextStyle;
+  final TextStyle? subtitleDefaultTextStyle;
 
   const IQParser({
-    Key key,
-    @required this.subtitleDefaultTextStyle,
+    Key? key,
+    this.subtitleDefaultTextStyle,
   }) : super(key: key);
 
   @override
@@ -46,28 +46,26 @@ class IQParser extends StatelessWidget {
         child: BlocBuilder<SubtitleBloc, SubtitleState>(
           bloc: BlocProvider.of<SubtitleBloc>(context),
           builder: (context, state) => Container(
-            child: state.data == null
-                ? null
-                : Builder(
-                    builder: (context) {
-                      return HTML.toRichText(
-                        context,
-                        '<p>${state.data}</p>',
-                        defaultTextStyle: subtitleDefaultTextStyle ??
-                            TextStyle(
-                              fontSize: 20,
-                              color: Colors.white,
-                              shadows: [
-                                Shadow(
-                                  color: Colors.black,
-                                  offset: Offset(1, 1),
-                                  blurRadius: 2.5,
-                                )
-                              ],
-                            ),
-                      );
-                    },
-                  ),
+            child: Builder(
+              builder: (context) {
+                return HTML.toRichText(
+                  context,
+                  '<p>${state.data}</p>',
+                  defaultTextStyle: subtitleDefaultTextStyle ??
+                      TextStyle(
+                        fontSize: 20,
+                        color: Colors.white,
+                        shadows: [
+                          Shadow(
+                            color: Colors.black,
+                            offset: Offset(1, 1),
+                            blurRadius: 2.5,
+                          )
+                        ],
+                      ),
+                );
+              },
+            ),
           ),
         ),
       );

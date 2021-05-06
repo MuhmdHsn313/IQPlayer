@@ -1,5 +1,4 @@
-import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
+part of 'player_bloc.dart';
 
 ///! The user have not to use this class.
 /// This class provide the state of player not the ui!
@@ -18,11 +17,10 @@ class PlayingState extends PlayerState {
   final Duration position;
 
   const PlayingState({
-    @required this.isPlay,
-    @required this.duration,
-    @required this.position,
-  })  : assert(isPlay != null),
-        assert(position != null);
+    required this.isPlay,
+    required this.duration,
+    required this.position,
+  });
 
   @override
   List<Object> get props => [isPlay, position, duration];

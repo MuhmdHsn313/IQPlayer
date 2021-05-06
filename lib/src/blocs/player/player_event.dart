@@ -1,4 +1,4 @@
-import 'package:equatable/equatable.dart';
+part of 'player_bloc.dart';
 
 ///! The user have not to use this class.
 /// This class provide the event of player not the ui!

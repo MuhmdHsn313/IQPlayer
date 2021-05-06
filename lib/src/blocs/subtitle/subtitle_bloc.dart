@@ -16,7 +16,7 @@ class SubtitleBloc extends Bloc<SubtitleEvent, SubtitleState> {
   List<Subtitle> subtitles;
 
   SubtitleBloc(this._subtitleProvider)
-      : subtitles = new List<Subtitle>(),
+      : subtitles = <Subtitle>[],
         _subtitleController = new SubtitleController(),
         super(SubtitleState.initial());
 
@@ -29,16 +29,15 @@ class SubtitleBloc extends Bloc<SubtitleEvent, SubtitleState> {
     }
 
     if (event is UpdateSubtitle) {
-      if (event.position != null)
-        for (Subtitle subtitle in subtitles) {
-          if (event.position >= subtitle.start &&
-              event.position <= subtitle.end) {
-            yield SubtitleState(subtitle.data);
-            break;
-          } else {
-            yield SubtitleState.initial();
-          }
+      for (Subtitle subtitle in subtitles) {
+        if (event.position >= subtitle.start &&
+            event.position <= subtitle.end) {
+          yield SubtitleState(subtitle.data);
+          break;
+        } else {
+          yield SubtitleState.initial();
         }
+      }
     }
   }
 }

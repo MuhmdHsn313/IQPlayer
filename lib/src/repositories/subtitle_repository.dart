@@ -9,7 +9,7 @@ import 'package:http/http.dart';
 class SubtitleRepository {
   /// Load the subtitles from network by provide the file url.
   Future<String> fetchFromNetwork(String url) async {
-    final response = await get(url);
+    final response = await get(Uri.http(url, ''));
     if (response.statusCode == 200) return utf8.decode(response.bodyBytes);
     throw 'ERROR_FETCH_SUBTITLE(${response.statusCode})';
   }

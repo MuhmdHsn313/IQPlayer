@@ -34,7 +34,7 @@ class MyHomePage extends StatelessWidget {
       body: Center(
         child: Column(
           children: [
-            RaisedButton(
+            ElevatedButton(
               child: Text('Open IQPlayer'),
               onPressed: () {
                 Navigator.push(
@@ -56,7 +56,8 @@ class MyHomePage extends StatelessWidget {
                             <i>Mindmarker je krátká zpráva formou
                             videa, souborů PDF...</i>
 
-                            00:00:07.548 --> 00:00:12.448
+                            00:00:07.548 --> 00:0  simple_html_css: ^2.0.0+2
+0:12.448
                             <span style='color:brown'>colorful</span>
 
                             00:00:12.472 --> 00:00:16.072

@@ -1,3 +1,5 @@
+library iqplayer.util;
+
 import 'package:flutter/widgets.dart';
 
 /// This is provide a method you can use to make your customization.

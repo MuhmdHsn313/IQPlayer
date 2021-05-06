@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
 
 ///! The user have not to use this class.
 /// This class provide the state of ui not the player!
@@ -9,16 +8,14 @@ class ScreenState extends Equatable {
   final bool lockRotation;
 
   const ScreenState({
-    @required this.lockScreen,
-    @required this.showControls,
-    @required this.lockRotation,
-  })  : assert(lockScreen != null),
-        assert(showControls != null),
-        assert(lockRotation != null);
+    required this.lockScreen,
+    required this.showControls,
+    required this.lockRotation,
+  });
 
   factory ScreenState.showControls({
-    bool lockScreen,
-    bool lockRotation,
+    bool? lockScreen,
+    bool? lockRotation,
   }) {
     return ScreenState(
       lockScreen: lockScreen ?? false,
@@ -28,9 +25,9 @@ class ScreenState extends Equatable {
   }
 
   ScreenState copyWith({
-    bool lockScreen,
-    bool lockRotation,
-    bool showControls,
+    bool? lockScreen,
+    bool? lockRotation,
+    bool? showControls,
   }) {
     return ScreenState(
       lockScreen: lockScreen ?? this.lockScreen,

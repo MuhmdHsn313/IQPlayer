@@ -1,4 +1,3 @@
-import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
 
 ///! The user have not to use this class.
@@ -9,12 +8,10 @@ class Subtitle extends Equatable {
   final String data;
 
   const Subtitle({
-    @required this.start,
-    @required this.end,
-    @required this.data,
-  })  : assert(start != null),
-        assert(end != null),
-        assert(data != null);
+    required this.start,
+    required this.end,
+    required this.data,
+  });
 
   bool operator >(Subtitle other) => this.start > other.start;
 

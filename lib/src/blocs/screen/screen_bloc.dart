@@ -11,8 +11,8 @@ class ScreenBloc extends Bloc<ScreenEvent, ScreenState> {
   final String description;
 
   ScreenBloc({
-    @required this.title,
-    @required this.description,
+    required this.title,
+    required this.description,
   }) : super(ScreenState.showControls()) {
     _hideStateBar();
     _enableRotation();
